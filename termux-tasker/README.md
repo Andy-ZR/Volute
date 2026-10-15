@@ -263,16 +263,20 @@ The templates were written for version `< 0.6.0` and currently have not been upd
 
 #### Tasker
 
+<!-- Fork note: upstream wrote the two links below as relative paths, but the referenced template
+     files do not live in this repository — they live in the standalone `termux/termux-tasker`
+     repository (see the curl URL right below). They were therefore made absolute. -->
+
 - `Tasks`
     - `XML`
-        Download the [Termux Tasker Plugin Basic Templates Task XML](templates/plugin_hosts/tasker/Termux_Tasker_Plugin_Basic_Templates.tsk.xml) file to the android download directory. To download, right-click or hold the `Raw` button at the top after opening a file link and select `Download/Save link` or use `curl` from a termux shell. Then import the downloaded task file into Tasker by long pressing the `Task` tab button in Tasker home and selecting `Import Task`.  
+        Download the [Termux Tasker Plugin Basic Templates Task XML](https://github.com/termux/termux-tasker/blob/master/templates/plugin_hosts/tasker/Termux_Tasker_Plugin_Basic_Templates.tsk.xml) file to the android download directory. To download, right-click or hold the `Raw` button at the top after opening a file link and select `Download/Save link` or use `curl` from a termux shell. Then import the downloaded task file into Tasker by long pressing the `Task` tab button in Tasker home and selecting `Import Task`.  
 
         `curl -L 'https://github.com/termux/termux-tasker/raw/master/templates/plugin_hosts/tasker/Termux_Tasker_Plugin_Basic_Templates.tsk.xml' -o "/storage/emulated/0/Download/Termux_Tasker_Plugin_Basic_Templates.tsk.xml"`  
 
     - `Taskernet`
         Import `Termux Tasker Plugin Basic Templates Task` from `Taskernet` from [here](https://taskernet.com/shares/?user=AS35m8mXdvaT1Vj8TwkSaCaoMUv220IIGtHe3pG4MymrCUhpgzrat6njEOnDVVulhAIHLi6BPUt1&id=Task%3ATermux+Tasker+Plugin+Basic+Templates).  
 
-    Check [Termux Tasker Plugin Basic Templates Task Info](templates/plugin_hosts/tasker/Termux_Tasker_Plugin_Basic_Templates.tsk.md) file for more info on the task.  
+    Check [Termux Tasker Plugin Basic Templates Task Info](https://github.com/termux/termux-tasker/blob/master/templates/plugin_hosts/tasker/Termux_Tasker_Plugin_Basic_Templates.tsk.md) file for more info on the task.  
 
 - `Scripts`
     To use the above task, you will also need to place the [termux_tasker_basic_bash_test](templates/scripts/termux_tasker_basic_bash_test) and [termux_tasker_basic_python_test](templates/scripts/termux_tasker_basic_python_test) scripts in `~/.termux/tasker/` directory after following its [Setup Instructions](#Setup-Instructions). They basically just print the first `2` args to `stdout` if only `2` args are received, otherwise exit with error.  
