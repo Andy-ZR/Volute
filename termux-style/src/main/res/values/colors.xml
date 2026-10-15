@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 图标底色（本模块的 mipmap 是 termux-app 的软链，需要这个值才能编译）；
+         与 termux-app/src/main/res/values/colors.xml 同名值一致 -->
+    <color name="ic_launcher_background">#FF7CC5E4</color>
+</resources>

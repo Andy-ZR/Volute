@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Volute 通知图标：蜗牛剪影 + 圆环壳（由 art/gen/gen_android.py 生成）-->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.355"
+        android:scaleY="0.355"
+        android:translateX="-41.8154"
+        android:translateY="-41.46395">
+    <path
+        android:fillType="evenOdd"
+        android:pathData="M33,78.5 C28,78.5 26,75 26,71.5 C26,65 27.5,59 29.5,54 C31.5,47.5 36.5,42.5 44,42.5 C51.5,42.5 55.5,45.5 58.5,50 C61,54 64,57.5 68.5,58 C77,58.5 81,63 81,70 C81,74.5 79,78.5 74.5,78.5 Z M46.60,57.00 a18.40,18.40 0 1 0 36.80,0 a18.40,18.40 0 1 0 -36.80,0 Z"
+        android:fillColor="#FFFFFFFF" />
+    <path
+        android:fillType="evenOdd"
+        android:pathData="M49.00,57.00 a16.00,16.00 0 1 0 32.00,0 a16.00,16.00 0 1 0 -32.00,0 Z M59.00,57.00 a6.00,6.00 0 1 0 12.00,0 a6.00,6.00 0 1 0 -12.00,0 Z"
+        android:fillColor="#FFFFFFFF" />
+    <path
+        android:pathData="M39,44.5 L37,33.5"
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="5.94"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M48,44.5 L49,33.5"
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="5.94"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M55.5,50 Q63.71,42.62 74.5,44.9"
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="5.72"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M50.66,50.00 a4.84,4.84 0 1 0 9.68,0 a4.84,4.84 0 1 0 -9.68,0 Z"
+        android:fillColor="#FFFFFFFF" />
+    <path
+        android:pathData="M69.66,44.90 a4.84,4.84 0 1 0 9.68,0 a4.84,4.84 0 1 0 -9.68,0 Z"
+        android:fillColor="#FFFFFFFF" />
+    </group>
+</vector>
