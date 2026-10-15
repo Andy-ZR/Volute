@@ -3,6 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- Volute 图标底色（深墨蓝），与 ic_foreground.xml 的 #5EF0C8 涡卷搭配 -->
+    <color name="ic_launcher_background">#FF0E1117</color>
+
     <color name="red_400">#FF0000</color>
 
     <color name="grey_500">#9E9E9E</color>

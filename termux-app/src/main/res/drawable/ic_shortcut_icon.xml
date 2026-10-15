@@ -10,24 +10,17 @@
                           A36,36 0 1,1 90,54
                           A36,36 0 1,1 18,54 Z" />
 
-    <!-- Keep in sync with adaptive ic_foreground.xml: -->
+    <!-- Keep in sync with adaptive ic_foreground.xml（同一涡卷标记，此处白色描边置于圆底上）： -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M34,38
-                          h6
-                          l12,16
-                          l-12,16
-                          h-6
-                          l12,-16
-                          "
-        />
-
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M56,66
-                          h18
-                          v4
-                          h-18
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M54,54
+                          a5,5 0 0 1 10,0
+                          a10,10 0 0 1 -20,0
+                          a16,16 0 0 1 32,0
+                          a24,24 0 0 1 -48,0
                           "
         />
 

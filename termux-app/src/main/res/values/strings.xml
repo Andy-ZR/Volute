@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="application_name">Termux</string>
+    <string name="application_name">Volute</string>
 
-    <string name="permission_termux_internal_label">Termux Internal</string>
-    <string name="permission_termux_internal_description">Access internal Termux functionality.</string>
+    <string name="permission_termux_internal_label">Volute Internal</string>
+    <string name="permission_termux_internal_description">Access internal Volute functionality.</string>
 
     <!-- Termux Bootstrap Packages Installation -->
     <string name="bootstrap_installer_body">Installing bootstrap packages…</string>
@@ -71,7 +71,7 @@
     <string name="msg_no_shortcut_scripts">No files in $HOME/.shortcuts/</string>
     <string name="action_refresh">Refresh</string>
     <string name="msg_pinned_shortcuts_not_supported">The current launcher does not support pinned shortcuts.</string>
-    <string name="msg_widgets_reloaded">Termux widget reloaded</string>
+    <string name="msg_widgets_reloaded">Volute widget reloaded</string>
     <string name="msg_executing_task">Executing task: \"%1$s\"</string>
 
     <!-- Miscellaneous -->

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 108 108">
+  <!-- Volute 标记源文件（2026-10-15 定稿）
+       与 termux-app/src/main/res/drawable/ic_foreground.xml 同源；改这里记得同步那边。
+
+       构造：以 (54,54) 为中心、半径 5 / 10 / 16 / 24 交替的半圆链 → 向外生长的「涡卷」（volute，涡螺/柱头涡卷双关）。
+       adaptive icon 安全区：108 视口内 72x72（即 18..90）；本路径含 7 宽描边后 x∈[24.5,79.5] y∈[30,78]，在内。 -->
+  <rect width="108" height="108" fill="#0E1117"/>
+  <!-- 安全区参考线（导出正式图时删掉这一行） -->
+  <circle cx="54" cy="54" r="36" fill="none" stroke="#333C46" stroke-width="0.6"/>
+  <path d="M54,54 a5,5 0 0 1 10,0 a10,10 0 0 1 -20,0 a16,16 0 0 1 32,0 a24,24 0 0 1 -48,0"
+        fill="none" stroke="#5EF0C8" stroke-width="7" stroke-linecap="round"/>
+</svg>

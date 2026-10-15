@@ -4,24 +4,20 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Keep in sync with non-adaptive ic_launcher.xml -->
+    <!-- Volute 标记：涡卷（quarter/semi-circle spiral，几何构造，非上游视觉元素）
+         构造：以 (54,54) 为中心、半径 5/10/16/24 交替的半圆链，形成向外生长的涡卷。
+         安全区：108 视口内 72x72（18..90），本路径含描边后 x∈[24.5,79.5] y∈[30,78]，在内。
+         与 ic_shortcut_icon.xml 同源，改这里记得同步那边。 -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M34,38
-                          h6
-                          l12,16
-                          l-12,16
-                          h-6
-                          l12,-16
-                          "
-        />
-
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M56,66
-                          h18
-                          v4
-                          h-18
+        android:strokeColor="#5EF0C8"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M54,54
+                          a5,5 0 0 1 10,0
+                          a10,10 0 0 1 -20,0
+                          a16,16 0 0 1 32,0
+                          a24,24 0 0 1 -48,0
                           "
         />
 
