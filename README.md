@@ -1,4 +1,4 @@
-# Mushell
+# Volute
 
 An Android terminal emulator and Linux environment — a fork of the **Google Play build lineage of [Termux](https://github.com/termux/termux-app)**, maintained for everyday use on a phone.
 
