@@ -43,7 +43,7 @@ public class TermuxApiPermissionActivity extends Activity {
                 public void writeJson(JsonWriter out) throws Exception {
                     String errorMessage = "Please grant the following permission"
                             + (permissionsToRequest.size() > 1 ? "s" : "")
-                            + " (at Settings > Apps > Termux:API > Permissions) to use this command: "
+                            + " (at Settings > Apps > Volute:API > Permissions) to use this command: "
                             + TextUtils.join(", ", permissionsToRequest);
                     out.beginObject().name("error").value(errorMessage).endObject();
                 }

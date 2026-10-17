@@ -115,7 +115,7 @@ public class WifiAPI {
             @Override
             public void writeJson(JsonWriter out) throws Exception {
                 out.beginObject();
-                out.name("API_ERROR").value("Enabling/disabling WIFI is not possible in the Google Play build - install Termux from F-Droid for that");
+                out.name("API_ERROR").value("Enabling/disabling WIFI is not possible in this build");
                 out.endObject();
             }
         });

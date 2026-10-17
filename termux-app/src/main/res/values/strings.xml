@@ -8,11 +8,11 @@
     <!-- Termux Bootstrap Packages Installation -->
     <string name="bootstrap_installer_body">Installing bootstrap packages…</string>
     <string name="bootstrap_error_title">Unable to install bootstrap</string>
-    <string name="bootstrap_error_body">Termux was unable to install the bootstrap packages.</string>
+    <string name="bootstrap_error_body">Volute was unable to install the bootstrap packages.</string>
     <string name="bootstrap_error_abort">Abort</string>
     <string name="bootstrap_error_try_again">Try again</string>
-    <string name="bootstrap_error_not_primary_user_message">Termux can only be run as the primary user.</string>
-    <string name="bootstrap_error_installed_on_portable_sd">Termux cannot be installed on external storage.</string>
+    <string name="bootstrap_error_not_primary_user_message">Volute can only be run as the primary user.</string>
+    <string name="bootstrap_error_installed_on_portable_sd">Volute cannot be installed on external storage.</string>
 
     <!-- Terminal Sidebar and Shortcuts -->
     <string name="action_new_session">New session</string>
@@ -47,7 +47,7 @@
     <string name="action_style_terminal">Style</string>
     <string name="action_toggle_keep_screen_on">Keep screen on</string>
     <string name="action_fullscreen">Fullscreen</string>
-    <string name="error_styling_not_installed">The latest Termux:Style app version is not installed.</string>
+    <string name="error_styling_not_installed">The latest Volute:Style app version is not installed.</string>
     <string name="action_styling_install">Install</string>
 
     <!-- Share -->

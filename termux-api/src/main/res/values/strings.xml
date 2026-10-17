@@ -2,8 +2,8 @@
 
 <!DOCTYPE resources [
     <!ENTITY TERMUX_PACKAGE_NAME "com.termux">
-    <!ENTITY TERMUX_APP_NAME "Termux">
-    <!ENTITY TERMUX_API_APP_NAME "Termux:API">
+    <!ENTITY TERMUX_APP_NAME "Volute">
+    <!ENTITY TERMUX_API_APP_NAME "Volute:API">
     <!ENTITY TERMUX_PREFIX_DIR_PATH "/data/data/com.termux/files/usr">
     ]>
 
@@ -11,16 +11,16 @@
     <string name="app_name">&TERMUX_API_APP_NAME;</string>
     <string name="share_file_chooser_title">Share with</string>
     <string name="grant_permission">Grant permission</string>
-    <string name="keep_alive_service">This service keeps Termux:API running in the background for faster startup of termux-* commands.</string>
+    <string name="keep_alive_service">This service keeps Volute:API running in the background for faster startup of termux-* commands.</string>
     <string name="permission_description">This app needs the following permission(s):\n</string>
 
-    <string name="permission_termux_internal_command_label">Run commands in the Termux environment</string>
-    <string name="permission_termux_internal_command_description">execute arbitrary commands within Termux environment and access files</string>
+    <string name="permission_termux_internal_command_label">Run commands in the Volute environment</string>
+    <string name="permission_termux_internal_command_description">execute arbitrary commands within Volute environment and access files</string>
 
     <string name="plugin_info">&TERMUX_API_APP_NAME; is a plugin app for the &TERMUX_APP_NAME; app
         that executes termux-api package commands.
-        Check &TERMUX_APP_NAME; app github %1$s, &TERMUX_API_APP_NAME; app github %2$s and
-        %3$s package github %4$s for more info.
+        Check the upstream project on GitHub %1$s, this plugin project %2$s and the
+        %3$s package on GitHub %4$s for more info.
 
         \n\nThe &TERMUX_API_APP_NAME; app requires `%3$s` apt package to function.
         Run `pkg install %3$s` to install it.

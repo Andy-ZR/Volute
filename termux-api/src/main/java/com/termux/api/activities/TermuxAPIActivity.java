@@ -85,7 +85,7 @@ public class TermuxAPIActivity extends AppCompatActivity {
 
             ReportInfo reportInfo = new ReportInfo(title, TermuxConstants.TERMUX_APP.TERMUX_SETTINGS_ACTIVITY_NAME, title);
             reportInfo.setReportString(aboutString.toString());
-            reportInfo.setReportSaveFileLabelAndPath(title, Environment.getExternalStorageDirectory() + "/" + FileUtils.sanitizeFileName(TermuxConstants.TERMUX_APP_NAME + "-" + title + ".log", true, true));
+            reportInfo.setReportSaveFileLabelAndPath(title, Environment.getExternalStorageDirectory() + "/" + FileUtils.sanitizeFileName("Volute-" + title + ".log", true, true));
             ReportActivity.startReportActivity(TermuxAPIActivity.this, reportInfo);
              */
         }).start();

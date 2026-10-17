@@ -115,7 +115,7 @@ public class TermuxFileReceiverActivity extends AppCompatActivity {
 
     void showErrorDialogAndQuit(String message) {
         mFinishOnDismissNameDialog = false;
-        TermuxMessageDialogUtils.showMessage(this, "Termux", message, null, (dialog, which) -> finish(), null, null, dialog -> finish());
+        TermuxMessageDialogUtils.showMessage(this, "Volute", message, null, (dialog, which) -> finish(), null, null, dialog -> finish());
     }
 
     void handleContentUri(@NonNull final Uri uri, String subjectFromIntent) {

@@ -18,7 +18,10 @@ android {
 
     defaultConfig {
         versionCode = 142
-        versionName = "googleplay.2026.10.09"
+        // 版本规范：versionName = **我们自己的语义化版本**（每次 release 打 v<versionName> tag，
+        // F-Droid 的 UpdateCheckMode: Tags ^v\d+\.\d+\.\d+$ 依赖它）；versionCode 单调递增。
+        // 上游底座版本另记在 PROGRESS/CHANGELOG（不再塞进 versionName）。
+        versionName = "0.1.0"
 
         val minSdkVersion = project.property("minSdkVersion") as String
         val targetSdkVersion = project.property("targetSdkVersion") as String

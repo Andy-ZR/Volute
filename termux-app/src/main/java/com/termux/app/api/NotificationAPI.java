@@ -33,7 +33,7 @@ public class NotificationAPI {
 
     // public static final String BIN_SH = TermuxConstants.TERMUX_PREFIX_DIR_PATH + "/bin/sh";
     private static final String CHANNEL_ID = "termux-notification";
-    private static final String CHANNEL_TITLE = "Termux API notification channel";
+    private static final String CHANNEL_TITLE = "Volute API notification channel";
     private static final String KEY_TEXT_REPLY = "TERMUX_TEXT_REPLY";
 
     /**

@@ -141,7 +141,7 @@ public class MicRecorderAPI {
         protected static String getDefaultRecordingFilename() {
             var dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH);
             var date = new Date();
-            return Environment.getExternalStorageDirectory().getAbsolutePath() + "/TermuxAudioRecording_" + dateFormat.format(date);
+            return Environment.getExternalStorageDirectory().getAbsolutePath() + "/VoluteAudioRecording_" + dateFormat.format(date);
         }
 
         protected static String getRecordingInfoJSONString() {

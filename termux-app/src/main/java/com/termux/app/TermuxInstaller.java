@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,40 @@ final class TermuxInstaller {
     private static final String TERMUX_STAGING_PREFIX_DIR_PATH = TermuxConstants.FILES_PATH + "/usr-staging"; // Default: "/data/data/com.termux/files/usr-staging"
 
     /**
+     * 我们的首屏欢迎语（层②-A）：bootstrap 自带上游那份 etc/motd，App 不换它 → 首屏一直是「Welcome to Termux」。
+     * 这里在 bootstrap 就位后把它换成我们自己的；保留一句来源说明（GPLv3 友好），其余指引照旧。
+     */
+    private static final String VOLUTE_MOTD =
+        "Welcome to Volute\n" +
+        "\n" +
+        "Based on Termux (GPLv3) \u2014 https://github.com/termux/termux-app\n" +
+        "\n" +
+        "Working with packages:\n" +
+        " - Search:  pkg search <query>\n" +
+        " - Install: pkg install <package>\n" +
+        " - Upgrade: pkg upgrade\n";
+
+    /**
+     * 把首屏 motd 从上游那份换成我们自己的。
+     * 只在「文件存在、且内容仍是上游的 Welcome to Termux」时替换 → 用户自定义过的**绝不覆盖**；可反复调用（幂等）。
+     */
+    static void writeMotdIfUpstream() {
+        try {
+            File motd = new File(TermuxConstants.PREFIX_PATH + "/etc/motd");
+            if (!motd.isFile()) return;                       // 还没有 bootstrap → 不碰
+            // ⚠️ 不能用 Files.readString/writeString：那是 Java 11 的 API，**Android 的 libcore 没实现**
+            //    （实测 NoSuchMethodError 崩在 Activity 启动路径上，2026-10-16）。用 Java 7 就有的 readAllBytes/write。
+            String current = new String(Files.readAllBytes(motd.toPath()), StandardCharsets.UTF_8);
+            if (!current.contains("Welcome to Termux")) return;  // 已被改过（含我们自己的）→ 不覆盖
+            Files.write(motd.toPath(), VOLUTE_MOTD.getBytes(StandardCharsets.UTF_8));
+            Log.i(TermuxConstants.LOG_TAG, "Replaced bootstrap motd with Volute's");
+        } catch (Throwable e) {
+            // ⚠️ 必须 catch Throwable：NoSuchMethodError 之类是 **Error**，catch(Exception) 抓不住 → 会崩 App
+            Log.e(TermuxConstants.LOG_TAG, "Error in writeMotdIfUpstream()", e);
+        }
+    }
+
+    /**
      * Performs bootstrap setup if necessary.
      */
     static void setupBootstrapIfNeeded(final Activity activity, final Runnable whenDone) {
@@ -80,6 +115,7 @@ final class TermuxInstaller {
 
         // If prefix directory exists, even if its a symlink to a valid directory and symlink is not broken/dangling
         if (new File(TermuxConstants.PREFIX_PATH).exists()) {
+            writeMotdIfUpstream();   // 已装 bootstrap 的（含升级上来的）也把首屏换成 Volute
             whenDone.run();
             return;
         }
@@ -161,6 +197,8 @@ final class TermuxInstaller {
                 }
 
                 Os.rename(TERMUX_STAGING_PREFIX_DIR_PATH, TermuxConstants.PREFIX_PATH);
+
+                writeMotdIfUpstream();   // 首次装完 bootstrap 立刻换掉上游那份 motd
 
                 activity.runOnUiThread(whenDone);
             } catch (final Exception e) {

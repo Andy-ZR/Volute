@@ -77,12 +77,12 @@ public class TermuxApiHandler {
         if (!mServiceConnected) {
             try (var out = new PrintWriter(new FileOutputStream(parcelOut.getFileDescriptor()))) {
                 if (tryBindIfNecessary()) {
-                    out.println("Establishing connection to Termux:API - try again in a few seconds");
+                    out.println("Establishing connection to Volute:API - try again in a few seconds");
                 } else {
-                    out.println("Termux:API is not yet available on Google Play - see https://github.com/termux-play-store/termux-apps/issues/29 for updates");
+                    out.println("Volute:API is not yet available on Google Play - see https://github.com/termux-play-store/termux-apps/issues/29 for updates");
                 }
             }
-            Log.e(TermuxConstants.LOG_TAG, "Not bound to Termux:API yet, ignoring intent");
+            Log.e(TermuxConstants.LOG_TAG, "Not bound to Volute:API yet, ignoring intent");
         } else {
             var msg = Message.obtain(null, 1, 0, 0, intent);
             try {
@@ -109,7 +109,7 @@ public class TermuxApiHandler {
      */
     private final ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
-            Log.e(TermuxConstants.LOG_TAG, "Connected to Termux:API service");
+            Log.e(TermuxConstants.LOG_TAG, "Connected to Volute:API service");
             // This is called when the connection with the service has been
             // established, giving us the object we can use to
             // interact with the service.  We are communicating with the
@@ -120,7 +120,7 @@ public class TermuxApiHandler {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            Log.e(TermuxConstants.LOG_TAG, "Disconnected from Termux:API service");
+            Log.e(TermuxConstants.LOG_TAG, "Disconnected from Volute:API service");
             // This is called when the connection with the service has been
             // unexpectedly disconnected&mdash;that is, its process crashed.
             mMessenger = null;
@@ -232,16 +232,16 @@ public class TermuxApiHandler {
             Log.e(TermuxConstants.LOG_TAG, "Already started bind, no need to bind again");
             return true;
         }
-        Log.e(TermuxConstants.LOG_TAG, "Trying to bind to Termux:API...");
+        Log.e(TermuxConstants.LOG_TAG, "Trying to bind to Volute:API...");
         try {
             mServiceBindingInitiated = mTermuxService.bindService(new Intent().setClassName("com.termux.api", "com.termux.api.TermuxApiService"),
                 mConnection,
                 Context.BIND_AUTO_CREATE);
         } catch (Exception e) {
-            Log.e(TermuxConstants.LOG_TAG, "Exception binding to Termux:API service", e);
+            Log.e(TermuxConstants.LOG_TAG, "Exception binding to Volute:API service", e);
         }
         if (!mServiceBindingInitiated) {
-            Log.w(TermuxConstants.LOG_TAG, "Could not bind to Termux:API");
+            Log.w(TermuxConstants.LOG_TAG, "Could not bind to Volute:API");
         }
         return mServiceBindingInitiated;
     }
@@ -269,7 +269,7 @@ public class TermuxApiHandler {
                 public void writeJson(JsonWriter out) throws Exception {
                     String errorMessage = "Please grant the following permission"
                         + (permissionsToRequest.size() > 1 ? "s" : "")
-                        + " (at Settings > Apps > Termux > Permissions) to use this command: "
+                        + " (at Settings > Apps > Volute > Permissions) to use this command: "
                         + TextUtils.join(", ", permissionsToRequest);
                     out.beginObject().name("error").value(errorMessage).endObject();
                 }

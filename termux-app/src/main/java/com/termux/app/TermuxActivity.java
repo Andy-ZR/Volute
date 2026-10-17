@@ -665,7 +665,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             // The startActivity() call is not documented to throw IllegalArgumentException.
             // However, crash reporting shows that it sometimes does, so catch it here.
             // The SecurityException may happen if app is not allowed to start TermuxStyleActivity (old installation or non-google play build).
-            Log.i(TermuxConstants.LOG_TAG, "Error starting Termux:Style - app needs to be installed", e);
+            Log.i(TermuxConstants.LOG_TAG, "Error starting Volute:Style - app needs to be installed", e);
 
             var installationUrl = "https://play.google.com/store/apps/details?id=com.termux.styling";
             new AlertDialog.Builder(this).setMessage(getString(R.string.error_styling_not_installed))
