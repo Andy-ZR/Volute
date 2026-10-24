@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.termux.R;
+import com.termux.app.settings.TermuxSettingsDialog;
 import com.termux.app.extrakeys.ExtraKeysView;
 import com.termux.app.extrakeys.TermuxTerminalExtraKeys;
 import com.termux.app.extrakeys.TerminalToolbarViewPager;
@@ -195,15 +196,17 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 -1, null, null);
             return true;
         });
-        View toggleKeyboardButton = findViewById(R.id.toggle_keyboard_button);
-        toggleKeyboardButton.setOnClickListener(item -> {
-            mTermuxTerminalViewClient.onToggleSoftKeyboardRequest();
-            getDrawer().closeDrawers();
-        });
-        toggleKeyboardButton.setOnLongClickListener(v -> {
-            toggleTerminalToolbar();
-            return true;
-        });
+
+
+        View settingsButton = findViewById(R.id.settings_button);
+        if (settingsButton != null) {
+            settingsButton.setOnClickListener(v -> TermuxSettingsDialog.show(TermuxActivity.this));
+            // 抽屉 ⌨ 按钮已删除（2026-10-24）；它原来的长按（切换终端工具栏）挪到这里
+            settingsButton.setOnLongClickListener(v -> {
+                toggleTerminalToolbar();
+                return true;
+            });
+        }
 
         registerForContextMenu(mTerminalView);
 
@@ -578,7 +581,6 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         }
         menu.add(Menu.NONE, CONTEXT_MENU_RESET_TERMINAL_ID, Menu.NONE, R.string.action_reset_terminal);
         menu.add(Menu.NONE, CONTEXT_MENU_KILL_PROCESS_ID, Menu.NONE, getResources().getString(R.string.action_kill_process, getCurrentSession().getPid())).setEnabled(currentSession.isRunning());
-        menu.add(Menu.NONE, CONTEXT_MENU_STYLING_ID, Menu.NONE, R.string.action_style_terminal);
         menu.add(Menu.NONE, CONTEXT_MENU_TOGGLE_KEEP_SCREEN_ON, Menu.NONE, R.string.action_toggle_keep_screen_on).setCheckable(true).setChecked(mTerminalView.getKeepScreenOn());
         menu.add(Menu.NONE, CONTEXT_MENU_FULLSCREEN_ID, Menu.NONE, R.string.action_fullscreen).setCheckable(true).setChecked(mPreferences.isFullscreen());
     }
@@ -621,9 +623,6 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             case CONTEXT_MENU_KILL_PROCESS_ID:
                 showKillSessionDialog(session);
                 return true;
-            case CONTEXT_MENU_STYLING_ID:
-                showStylingDialog();
-                return true;
             case CONTEXT_MENU_TOGGLE_KEEP_SCREEN_ON:
                 toggleKeepScreenOn();
                 return true;
@@ -657,6 +656,11 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         b.show();
     }
 
+    /** 配色/字体入口：现在从「设置」进（长按终端菜单只保留终端操作）。 */
+    public void openStylingDialog() {
+        showStylingDialog();
+    }
+
     private void showStylingDialog() {
         try {
             //noinspection deprecation
@@ -667,11 +671,8 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             // The SecurityException may happen if app is not allowed to start TermuxStyleActivity (old installation or non-google play build).
             Log.i(TermuxConstants.LOG_TAG, "Error starting Volute:Style - app needs to be installed", e);
 
-            var installationUrl = "https://play.google.com/store/apps/details?id=com.termux.styling";
-            new AlertDialog.Builder(this).setMessage(getString(R.string.error_styling_not_installed))
-                .setPositiveButton(R.string.action_styling_install,
-                    (dialog, which) -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(installationUrl))))
-                .setNegativeButton(R.string.cancel, null).show();
+            new AlertDialog.Builder(this).setMessage(R.string.error_styling_not_installed)
+                .setPositiveButton(R.string.ok, null).show();
         }
     }
 
@@ -749,6 +750,11 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
         var flag = Build.VERSION.SDK_INT >= 33 ? Context.RECEIVER_NOT_EXPORTED : 0;
         registerReceiver(mTermuxActivityBroadcastReceiver, intentFilter, flag);
+    }
+
+    /** 设置弹框写完备注文件后调用：重载 properties（含 extra-keys）并立即生效。 */
+    public void reloadSettingsFromProperties() {
+        reloadActivityStyling();
     }
 
     private void reloadActivityStyling() {

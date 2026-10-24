@@ -12,7 +12,7 @@ public final class TermuxProperties {
 
     private final Properties properties = new Properties();
 
-    public static final String EXTRA_KEYS_DEFAULT = "[['ESC','/',{key: '-', popup: '|'},'HOME','UP','END','PGUP','PREV_SESSION','NEXT_SESSION'], ['TAB','CTRL','ALT','LEFT','DOWN','RIGHT','PGDN']]";
+    public static final String EXTRA_KEYS_DEFAULT = "[['ESC','/',{key: '-', popup: '|'},'HOME','UP','END','PGUP'], ['TAB','CTRL','ALT','LEFT','DOWN','RIGHT','PGDN']]";
     public static final String EXTRA_KEYS_STYLE_DEFAULT = "default";
 
     void reloadProperties(TermuxActivity activity) {
@@ -50,6 +50,25 @@ public final class TermuxProperties {
 
     public String getExtraKeys() {
         return properties.getProperty("extra-keys", EXTRA_KEYS_DEFAULT);
+    }
+
+    /** 复制/分享时是否把被 TUI 硬换行拆断的 URL 接回一行（默认开）。 */
+    public boolean shouldJoinSplitUrls() {
+        return !"false".equalsIgnoreCase(properties.getProperty("join-url-on-copy", "true").trim());
+    }
+
+    /** 会话数上限；未配置返回 null（由调用方按设备内存自适应）。 */
+    public String getMaxSessions() {
+        return properties.getProperty("max-sessions");
+    }
+
+    /**
+     * 切会话时是否弹底部提示（会话标题黑框）。
+     * 默认 **关**：切会话只能从抽屉 tab 列表发生（横划/⏮⏭ 已撤），提示是纯噪音；
+     * 需要上游行为的用户把它设成 true。
+     */
+    public boolean shouldShowSessionChangeToast() {
+        return properties.getProperty("session-change-toast", "false").equalsIgnoreCase("true");
     }
 
     public String getExtraKeysStyle() {

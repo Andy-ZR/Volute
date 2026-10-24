@@ -163,6 +163,42 @@ public class TermuxUrlUtils {
 
 
 
+    /**
+     * 把被 TUI **硬换行**拆断的 URL 接回一行（2026-10-24 用户需求）。
+     *
+     * 背景：opencode 这类 TUI 会把超长 URL 硬拆成多行（真的写入换行符），终端拿到的就是
+     * `https://…` 换行再接一段，复制出来是断的。Termux 的复制路径已合并"软换行"，
+     * 所以断的只可能是硬换行。
+     *
+     * 判据（只有"这一行被写满"才认为是硬换行，避免把两行独立文本粘起来）：
+     * 行尾是 URL、行宽达到终端列数（±1）、下一行不以空白/新 URL 开头 → 拼接；可多段循环。
+     *
+     * @param columns 终端列数（`TerminalEmulator.mColumns`）；<=0 时不看行宽，只按字符判断。
+     */
+    public static String joinSplitUrls(@NonNull String text, int columns) {
+        if (text.indexOf('\n') < 0) return text;
+        String[] lines = text.split("\n", -1);
+        java.util.List<String> merged = new java.util.ArrayList<>(lines.length);
+        int i = 0;
+        while (i < lines.length) {
+            String current = lines[i];
+            while (true) {
+                int urlStart = current.lastIndexOf("http");
+                boolean endsWithUrl = urlStart >= 0 && current.indexOf(' ', urlStart) < 0;
+                boolean fullWidth = columns <= 0 || current.length() >= columns - 1;
+                boolean canJoin = i + 1 < lines.length && endsWithUrl && fullWidth
+                        && !lines[i + 1].isEmpty()
+                        && !Character.isWhitespace(lines[i + 1].charAt(0))
+                        && !lines[i + 1].startsWith("http");
+                if (!canJoin) break;
+                current = current + lines[++i];
+            }
+            merged.add(current);
+            i++;
+        }
+        return String.join("\n", merged);
+    }
+
     /** Wrapper for {@link #copyTextToClipboard(Context, String, String, String)} with `null` `clipDataLabel` and `toastString`. */
     public static void copyTextToClipboard(Context context, final String text) {
         copyTextToClipboard(context, null, text, null);

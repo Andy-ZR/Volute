@@ -26,14 +26,6 @@ public interface TerminalViewClient {
      */
     void onSingleTapUp(MotionEvent e);
 
-    /**
-     * Called when a horizontal fling (swipe) is detected on the terminal view.
-     *
-     * @param leftward {@code true} if the fling went from right to left.
-     * @return {@code true} if the fling was consumed and should not be handled as scroll.
-     */
-    boolean onHorizontalFling(boolean leftward);
-
     boolean shouldBackButtonBeMappedToEscape();
 
     boolean shouldEnforceCharBasedInput();

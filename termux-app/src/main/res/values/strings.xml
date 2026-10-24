@@ -74,8 +74,43 @@
     <string name="msg_widgets_reloaded">Volute widget reloaded</string>
     <string name="msg_executing_task">Executing task: \"%1$s\"</string>
 
+    <!-- Settings (Volute) -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_style">Style: colors &amp; font…</string>
+    <string name="settings_kb_auto">Keyboard on tap: auto (follow mouse mode)</string>
+    <string name="settings_kb_bottom">Keyboard on tap: bottom rows only (default)</string>
+    <string name="settings_kb_always">Keyboard on tap: always</string>
+    <string name="settings_kb_never">Keyboard on tap: never</string>
+    <string name="settings_extra_keys">Extra keys</string>
+    <string name="settings_session_toast_on">Session switch toast: on</string>
+    <string name="settings_session_toast_off">Session switch toast: off</string>
+    <string name="settings_about">About Volute</string>
+    <string name="settings_saved">Saved</string>
+    <string name="settings_write_failed">Cannot write ~/.termux/termux.properties</string>
+    <string name="extra_keys_edit_cells">Edit keys one by one…</string>
+    <string name="extra_keys_preset_default">Preset: default (2 rows × 7)</string>
+    <string name="extra_keys_preset_compact">Preset: compact (2 rows × 6)</string>
+    <string name="extra_keys_preset_single">Preset: single row (8 keys)</string>
+    <string name="extra_keys_preset_none">Preset: hide extra keys</string>
+    <string name="extra_keys_cell">Row %1$d · key %2$d: %3$s</string>
+    <string name="extra_keys_add_cell">＋ Add a key to the last row</string>
+    <string name="extra_keys_add_row">＋ Add a row</string>
+    <string name="extra_keys_remove_row">－ Remove the last row</string>
+    <string name="extra_keys_pick">Choose a key</string>
+    <string name="extra_keys_clear">— Empty (remove this key) —</string>
+    <string name="extra_keys_type_char">Type a character…</string>
+    <string name="extra_keys_char_hint">One character</string>
+    <string name="extra_keys_char_invalid">Type exactly one character</string>
+    <string name="action_rename_session">Rename</string>
+    <string name="action_close_session">Close session</string>
+    <string name="dialog_close_session_title">Close session?</string>
+    <string name="dialog_close_session_message">The process is still running and will be terminated.</string>
+    <string name="about_version">Version %1$s (%2$d)</string>
+    <string name="about_text">Volute — an Android terminal emulator and Linux environment.\n\nBased on Termux (GPLv3), Google Play lineage.\nConfiguration file: ~/.termux/termux.properties</string>
+
     <!-- Miscellaneous -->
     <string name="hint_file_name">File name</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="notification_channel_high_priority">High Priority</string>
     <string name="notification_channel_low_priority">Low Priority</string>

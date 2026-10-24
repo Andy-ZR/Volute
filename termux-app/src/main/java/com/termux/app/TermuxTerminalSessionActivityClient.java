@@ -2,6 +2,7 @@ package com.termux.app;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -80,11 +81,40 @@ public final class TermuxTerminalSessionActivityClient implements TerminalSessio
 
     private BellHandler mBellHandler;
 
-    private static final int MAX_SESSIONS = 8;
+    /** 上限下限（低端机 / 用户显式配置之外的地板）。 */
+    private static final int MIN_SESSIONS = 8;
+    /** 上限天花板（避免 32G 机器开出几十个会话）。 */
+    private static final int MAX_SESSIONS_CAP = 32;
 
     private SoundPool mBellSoundPool;
 
     private int mBellSoundId;
+
+    /**
+     * 会话数上限：优先读 `termux.properties` 的 `max-sessions`；否则按设备内存自适应。
+     * 规则（2026-10-24 定）：低端机 → 8（上游值）；其他 → clamp(总内存MB / 512, 8, 32)。
+     * 依据：每个 bash 会话实测约 4.9MB RSS + transcript 几百 KB，8 在现在的手机上过于保守。
+     */
+    private int getMaxSessions() {
+        String prop = mActivity.mProperties.getMaxSessions();
+        if (prop != null) {
+            try {
+                return Math.max(1, Integer.parseInt(prop.trim()));
+            } catch (NumberFormatException ignored) {
+                // 配错就退回自适应
+            }
+        }
+        try {
+            var am = mActivity.getSystemService(ActivityManager.class);
+            if (am == null || am.isLowRamDevice()) return MIN_SESSIONS;
+            var info = new ActivityManager.MemoryInfo();
+            am.getMemoryInfo(info);
+            int totalMb = (int) (info.totalMem / (1024 * 1024));
+            return Math.min(MAX_SESSIONS_CAP, Math.max(MIN_SESSIONS, totalMb / 512));
+        } catch (Throwable t) {
+            return MIN_SESSIONS;
+        }
+    }
 
     public TermuxTerminalSessionActivityClient(TermuxActivity activity) {
         this.mActivity = activity;
@@ -227,6 +257,8 @@ public final class TermuxTerminalSessionActivityClient implements TerminalSessio
     @Override
     public void onCopyTextToClipboard(@NonNull TerminalSession session, String text) {
         if (!mActivity.isVisible()) return;
+        if (mActivity.mProperties.shouldJoinSplitUrls())
+            text = TermuxUrlUtils.joinSplitUrls(text, session.getEmulator() == null ? 0 : session.getEmulator().mColumns);
         TermuxUrlUtils.copyTextToClipboard(mActivity, text);
     }
 
@@ -316,6 +348,7 @@ public final class TermuxTerminalSessionActivityClient implements TerminalSessio
 
     void notifyOfSessionChange() {
         if (!mActivity.isVisible()) return;
+        if (!mActivity.mProperties.shouldShowSessionChangeToast()) return;   // 默认关，见 TermuxProperties
         TerminalSession session = mActivity.getCurrentSession();
         mActivity.showTransientMessage(toToastTitle(session), false);
     }
@@ -381,7 +414,7 @@ public final class TermuxTerminalSessionActivityClient implements TerminalSessio
             return;
         }
 
-        if (service.getTermuxSessionsSize() >= MAX_SESSIONS) {
+        if (service.getTermuxSessionsSize() >= getMaxSessions()) {
             new AlertDialog.Builder(mActivity)
                 .setTitle(R.string.title_max_terminals_reached)
                 .setMessage(R.string.msg_max_terminals_reached)

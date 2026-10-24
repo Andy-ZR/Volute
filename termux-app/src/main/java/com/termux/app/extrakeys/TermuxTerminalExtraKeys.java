@@ -122,12 +122,6 @@ public final class TermuxTerminalExtraKeys {
         } else if ("PASTE".equals(key)) {
             if(mTermuxTerminalSessionActivityClient != null)
                 mTermuxTerminalSessionActivityClient.onPasteTextFromClipboard(null);
-        } else if ("PREV_SESSION".equals(key)) {
-            if (mTermuxTerminalSessionActivityClient != null)
-                mTermuxTerminalSessionActivityClient.switchToSession(false);
-        } else if ("NEXT_SESSION".equals(key)) {
-            if (mTermuxTerminalSessionActivityClient != null)
-                mTermuxTerminalSessionActivityClient.switchToSession(true);
         }  else if ("SCROLL".equals(key)) {
             TerminalView terminalView = mTermuxTerminalViewClient.getActivity().getTerminalView();
             if (terminalView != null && terminalView.mEmulator != null)

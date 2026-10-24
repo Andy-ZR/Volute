@@ -177,14 +177,6 @@ public final class TerminalView extends View {
                 // Do not start scrolling until last fling has been taken care of:
                 if (!mScroller.isFinished()) return true;
 
-                // 横向滑动：终端里横向本来没有用途（竖直滑动才滚动），所以征用它来切会话。
-                // 选择模式下不抢（否则没法横向拖选），且必须明显横向、足够快才认。
-                if (!isSelectingText()
-                        && Math.abs(velocityX) > Math.abs(velocityY) * 1.5f
-                        && Math.abs(velocityX) > 1000f) {
-                    if (mClient.onHorizontalFling(velocityX < 0)) return true;
-                }
-
                 final boolean mouseTrackingAtStartOfFling = mEmulator.isMouseTrackingActive();
                 float SCALE = 0.25f;
                 if (mouseTrackingAtStartOfFling) {
@@ -228,7 +220,10 @@ public final class TerminalView extends View {
 
             @Override
             public boolean onDoubleTap(MotionEvent event) {
-                // Do not treat is as a single confirmed tap - it may be followed by zoom.
+                // 双击 = 唤起软键盘（Keyboard 隐藏时才有实际效果；可见时等于空操作，
+                // 因此不会抢 TUI 自己的双击语义）。长按仍是选择，不改。
+                // 实测（2026-10-24）：鼠标上报的 TUI 里双击唤不起软键盘（showSoftInput 被忽略），
+                // 且长按已定义为选择 → 双击不做功能；TUI 里唤键盘用抽屉 ⌨ 按钮。
                 return false;
             }
 
@@ -489,6 +484,11 @@ public final class TerminalView extends View {
      *
      * @param textSize the new font size, in density-independent pixels.
      */
+    /** 单行像素高度（渲染器的行间距）。 */
+    public int getFontLineSpacing() {
+        return mRenderer.getFontLineSpacing();
+    }
+
     public void setTextSize(int textSize) {
         mRenderer = new TerminalRenderer(textSize, mRenderer == null ? Typeface.MONOSPACE : mRenderer.mTypeface);
         updateSize();

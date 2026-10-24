@@ -55,8 +55,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/toggle_keyboard_button"
+                        android:id="@+id/settings_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -67,9 +68,7 @@
                         app:iconPadding="0dp"
                         app:iconGravity="textStart"
                         app:iconTint="@color/black"
-                        app:icon="@drawable/icon_keyboard"
-                        android:nextFocusLeft="@id/toggle_keyboard_button"
-                        android:nextFocusDown="@id/toggle_keyboard_button"
+                        app:icon="@drawable/icon_settings"
                         />
 
                     <com.google.android.material.button.MaterialButton
@@ -88,6 +87,7 @@
                         android:nextFocusDown="@id/new_session_button"
                         android:nextFocusRight="@id/new_session_button"
                         />
+
                 </LinearLayout>
             </LinearLayout>
 

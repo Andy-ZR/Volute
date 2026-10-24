@@ -70,9 +70,9 @@ public final class TermuxTerminalViewClient implements TerminalViewClient {
         TerminalSession session = mActivity.getCurrentSession();
         if (session != null) {
             TerminalEmulator term = mActivity.getCurrentSession().getEmulator();
-            // 原逻辑：终端程序开了鼠标上报（opencode / tmux 等 TUI）时就不弹键盘。但此时点终端会被
-            // 当成鼠标点击转给程序，而键盘已经收起 —— 用户就再也拿不回键盘了。改：只有「鼠标上报中
-            // 且 键盘已经可见」时才跳过，键盘收起时照弹。
+            // 2026-10-15 的原始修复（patch 0002）：
+            // 上游是「程序开了鼠标上报（opencode / tmux 等 TUI）就不弹键盘」，可此时键盘已收起，
+            // 用户就再也拿不回来。改成：只有「鼠标上报中 **且** 键盘已经可见」时才跳过；键盘收起时照弹。
             if (!e.isFromSource(InputDevice.SOURCE_MOUSE)
                     && (!term.isMouseTrackingActive() || !isSoftKeyboardVisible())) {
                 mActivity.getSystemService(InputMethodManager.class).showSoftInput(mActivity.getTerminalView(), 0);
@@ -80,7 +80,7 @@ public final class TermuxTerminalViewClient implements TerminalViewClient {
         }
     }
 
-    /** 软键盘是否可见。本分支没有 termux-shared 的 KeyboardUtils，用 WindowInsets 自判（minSdk 30）。 */
+    /** 软键盘当前是否可见（WindowInsets，minSdk 30 可用）。 */
     private boolean isSoftKeyboardVisible() {
         var window = mActivity.getWindow();
         var decorView = window != null ? window.getDecorView() : null;
@@ -387,15 +387,22 @@ public final class TermuxTerminalViewClient implements TerminalViewClient {
         TerminalBuffer terminalBuffer = terminalEmulator.getScreen();
         if (terminalBuffer == null) return;
         String sessionTranscript = terminalBuffer.getTranscriptTextWithoutJoinedLines().trim();
+        int columns = session.getEmulator() == null ? 0 : session.getEmulator().mColumns;
+        String text = mActivity.mProperties.shouldJoinSplitUrls()
+            ? TermuxUrlUtils.joinSplitUrls(sessionTranscript, columns) : sessionTranscript;
         TermuxUrlUtils.shareText(mActivity, mActivity.getString(R.string.title_share_transcript),
-            sessionTranscript, mActivity.getString(R.string.title_share_transcript_with));
+            text, mActivity.getString(R.string.title_share_transcript_with));
     }
 
     public void shareSelectedText() {
         String selectedText = mActivity.getTerminalView().getStoredSelectedText();
         if (selectedText != null && !selectedText.isEmpty()) {
+            var current = mActivity.getCurrentSession();
+            int columns = current == null || current.getEmulator() == null ? 0 : current.getEmulator().mColumns;
+            String text = mActivity.mProperties.shouldJoinSplitUrls()
+                ? TermuxUrlUtils.joinSplitUrls(selectedText, columns) : selectedText;
             TermuxUrlUtils.shareText(mActivity, mActivity.getString(R.string.title_share_selected_text),
-                selectedText, mActivity.getString(R.string.title_share_selected_text_with));
+                text, mActivity.getString(R.string.title_share_selected_text_with));
         }
     }
 
@@ -449,12 +456,4 @@ public final class TermuxTerminalViewClient implements TerminalViewClient {
         }
     }
 
-
-    @Override
-    public boolean onHorizontalFling(boolean leftward) {
-        if (mTermuxTerminalSessionActivityClient == null) return false;
-        // 向左划 = 下一个会话；向右划 = 上一个（与翻页手感一致）
-        mTermuxTerminalSessionActivityClient.switchToSession(leftward);
-        return true;
-    }
 }

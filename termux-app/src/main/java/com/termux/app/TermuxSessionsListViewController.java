@@ -1,6 +1,7 @@
 package com.termux.app;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -89,8 +90,51 @@ public class TermuxSessionsListViewController extends ArrayAdapter<TerminalSessi
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         var selectedSession = getItem(position);
-        mActivity.getTermuxTerminalSessionClient().renameSession(selectedSession);
+        // 长按给出「重命名 / 关闭会话」——上游只有改名，没有关会话入口（2026-10-24 补）
+        new AlertDialog.Builder(mActivity)
+            .setItems(new CharSequence[]{
+                mActivity.getString(R.string.action_rename_session),
+                mActivity.getString(R.string.action_close_session),
+            }, (dialog, which) -> {
+                if (which == 0) {
+                    mActivity.getTermuxTerminalSessionClient().renameSession(selectedSession);
+                } else {
+                    closeSession(selectedSession);
+                }
+            })
+            .show();
         return true;
+    }
+
+    /** 进程还在跑 → 二次确认（与长按终端里的「结束进程」同语义）。 */
+    private void closeSession(TerminalSession session) {
+        if (session.isRunning()) {
+            new AlertDialog.Builder(mActivity)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.dialog_close_session_title)
+                .setMessage(R.string.dialog_close_session_message)
+                .setPositiveButton(R.string.action_close_session, (dialog, id) -> doCloseSession(session, true))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+        } else {
+            doCloseSession(session, false);
+        }
+    }
+
+    /** 真的把 tab 关掉：最后一个会话先补一个新的，避免直接把 Activity 带走。 */
+    private void doCloseSession(TerminalSession session, boolean wasRunning) {
+        var service = mActivity.getTermuxService();
+        if (service == null) return;
+        var client = mActivity.getTermuxTerminalSessionClient();
+        if (service.getTermuxSessionsSize() <= 1) {
+            client.addNewSession(false, null, null, null);
+        }
+        if (wasRunning) {
+            session.finishIfRunning();          // SIGKILL，进程退出是异步的
+            mActivity.getTerminalView().postDelayed(() -> client.removeFinishedSession(session), 300);
+        } else {
+            client.removeFinishedSession(session);
+        }
     }
 
 }

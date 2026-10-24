@@ -64,8 +64,6 @@ public final class ExtraKeysConstants {
             put("KEYBOARD", "⌨"); // U+2328 ⌨ KEYBOARD not well known but easy to understand
             put("PASTE", "⎘"); // U+2398
             put("SCROLL", "⇳"); // U+21F3
-            put("PREV_SESSION", "⏮"); // U+23EE ⏮ 上一个会话（切会话入口，见 patches/0003）
-            put("NEXT_SESSION", "⏭"); // U+23ED ⏭ 下一个会话
         }};
 
         public static final ExtraKeyDisplayMap LESS_KNOWN_CHARACTERS_DISPLAY = new ExtraKeyDisplayMap() {{
