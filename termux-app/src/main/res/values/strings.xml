@@ -44,12 +44,9 @@
     <string name="msg_terminal_reset">Terminal reset</string>
     <string name="action_kill_process">Kill process (%d)</string>
     <string name="title_confirm_kill_process">Really kill this session?</string>
-    <string name="action_style_terminal">Style</string>
     <string name="action_toggle_keep_screen_on">Keep screen on</string>
     <string name="action_fullscreen">Fullscreen</string>
     <string name="error_styling_not_installed">The latest Volute:Style app version is not installed.</string>
-    <string name="action_styling_install">Install</string>
-
     <!-- Share -->
     <string name="title_share_with">Share With</string>
     <string name="title_open_url_with">Open URL With</string>
@@ -77,10 +74,6 @@
     <!-- Settings (Volute) -->
     <string name="settings_title">Settings</string>
     <string name="settings_style">Style: colors &amp; font…</string>
-    <string name="settings_kb_auto">Keyboard on tap: auto (follow mouse mode)</string>
-    <string name="settings_kb_bottom">Keyboard on tap: bottom rows only (default)</string>
-    <string name="settings_kb_always">Keyboard on tap: always</string>
-    <string name="settings_kb_never">Keyboard on tap: never</string>
     <string name="settings_extra_keys">Extra keys</string>
     <string name="settings_session_toast_on">Session switch toast: on</string>
     <string name="settings_session_toast_off">Session switch toast: off</string>
@@ -99,7 +92,6 @@
     <string name="extra_keys_pick">Choose a key</string>
     <string name="extra_keys_clear">— Empty (remove this key) —</string>
     <string name="extra_keys_type_char">Type a character…</string>
-    <string name="extra_keys_char_hint">One character</string>
     <string name="extra_keys_char_invalid">Type exactly one character</string>
     <string name="action_rename_session">Rename</string>
     <string name="action_close_session">Close session</string>
