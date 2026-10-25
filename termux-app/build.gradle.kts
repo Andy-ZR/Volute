@@ -17,11 +17,11 @@ android {
     this.ndkVersion = ndkVersion
 
     defaultConfig {
-        versionCode = 163
+        versionCode = 164
         // 版本规范：versionName = **我们自己的语义化版本**（每次 release 打 v<versionName> tag，
         // F-Droid 的 UpdateCheckMode: Tags ^v\d+\.\d+\.\d+$ 依赖它）；versionCode 单调递增。
         // 上游底座版本另见 README 的 Base 行（不再塞进 versionName）。
-        versionName = "0.7.0"
+        versionName = "0.7.1"
 
         val minSdkVersion = project.property("minSdkVersion") as String
         val targetSdkVersion = project.property("targetSdkVersion") as String
