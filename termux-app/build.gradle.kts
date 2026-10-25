@@ -74,6 +74,16 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            // Robolectric 在 JDK 17+ 上需要通过反射改 FileDescriptor 内部字段，
+            // 不加 --add-opens 会报 "Failed to interact with raw FileDescriptor internals"。
+            all {
+                it.jvmArgs(
+                    "--add-opens=java.base/java.io=ALL-UNNAMED",
+                    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                    "--add-opens=java.base/java.util=ALL-UNNAMED",
+                    "--add-opens=java.base/java.nio=ALL-UNNAMED"
+                )
+            }
         }
     }
 
