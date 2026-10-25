@@ -126,45 +126,31 @@ public final class TermuxTerminalViewClient implements TerminalViewClient {
             mTermuxTerminalSessionActivityClient.removeFinishedSession(currentSession);
             return true;
         } else if (e.isCtrlPressed() && e.isAltPressed()) {
-            // Get the unmodified code point:
+            // Ctrl+Alt 组合键：映射逻辑抽在 ShortcutMapper（纯函数，有单测覆盖）。
             int unicodeChar = e.getUnicodeChar(0);
-
-            if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || unicodeChar == 'n'/* next */) {
-                mTermuxTerminalSessionActivityClient.switchToSession(true);
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP || unicodeChar == 'p' /* previous */) {
-                mTermuxTerminalSessionActivityClient.switchToSession(false);
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                mActivity.getDrawer().openDrawer(Gravity.LEFT);
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                mActivity.getDrawer().closeDrawers();
-            } else if (unicodeChar == 'c'/* create */) {
-                mTermuxTerminalSessionActivityClient.addNewSession(false, null, null, null);
-            } else if (unicodeChar == 'k'/* keyboard */) {
-                onToggleSoftKeyboardRequest();
-            } else if (unicodeChar == 'm'/* menu */) {
-                mActivity.getTerminalView().showContextMenu();
-            } else if (unicodeChar == 'r'/* rename */) {
-                mTermuxTerminalSessionActivityClient.renameSession(currentSession);
-            } else if (unicodeChar == 'u' /* urls */) {
-                showUrlSelection();
-            } else if (unicodeChar == 'v') {
-                doPaste();
-            } else if (unicodeChar == 'z' /* Zecret */) {
-                mActivity.requestAutoFill();
-            } else if (unicodeChar == '+' || e.getUnicodeChar(KeyEvent.META_SHIFT_ON) == '+') {
-                // We also check for the shifted char here since shift may be required to produce '+',
-                // see https://github.com/termux/termux-api/issues/2
-                changeFontSize(true);
-            } else if (unicodeChar == '-') {
-                changeFontSize(false);
-            } else if (unicodeChar == 'f') {
-                boolean doFullscreen = mActivity.mPreferences.toggleFullscreen();
-                mActivity.applyFullscreenSetting(doFullscreen);
-            } else if (unicodeChar == 't') {
-                mActivity.toggleTerminalToolbar();
-            } else if (unicodeChar >= '1' && unicodeChar <= '9') {
-                int index = unicodeChar - '1';
-                mTermuxTerminalSessionActivityClient.switchToSession(index);
+            int unicodeCharShifted = e.getUnicodeChar(KeyEvent.META_SHIFT_ON);
+            var shortcut = ShortcutMapper.map(keyCode, unicodeChar, unicodeCharShifted);
+            switch (shortcut.action) {
+                case NEXT_SESSION -> mTermuxTerminalSessionActivityClient.switchToSession(true);
+                case PREV_SESSION -> mTermuxTerminalSessionActivityClient.switchToSession(false);
+                case JUMP_SESSION -> mTermuxTerminalSessionActivityClient.switchToSession(shortcut.sessionIndex);
+                case OPEN_DRAWER -> mActivity.getDrawer().openDrawer(Gravity.LEFT);
+                case CLOSE_DRAWER -> mActivity.getDrawer().closeDrawers();
+                case NEW_SESSION -> mTermuxTerminalSessionActivityClient.addNewSession(false, null, null, null);
+                case TOGGLE_KEYBOARD -> onToggleSoftKeyboardRequest();
+                case SHOW_MENU -> mActivity.getTerminalView().showContextMenu();
+                case RENAME_SESSION -> mTermuxTerminalSessionActivityClient.renameSession(currentSession);
+                case SHOW_URLS -> showUrlSelection();
+                case PASTE -> doPaste();
+                case AUTOFILL -> mActivity.requestAutoFill();
+                case FONT_INCREASE -> changeFontSize(true);
+                case FONT_DECREASE -> changeFontSize(false);
+                case TOGGLE_FULLSCREEN -> {
+                    boolean doFullscreen = mActivity.mPreferences.toggleFullscreen();
+                    mActivity.applyFullscreenSetting(doFullscreen);
+                }
+                case TOGGLE_TOOLBAR -> mActivity.toggleTerminalToolbar();
+                default -> { /* 未映射：与上游一致，Ctrl+Alt 组合一律被吞掉 */ }
             }
             return true;
         }

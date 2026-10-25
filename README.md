@@ -42,6 +42,8 @@ The build downloads the bootstrap archives from the upstream package repositorie
 
 Requires **Android 11+** (minSdk 30). The APK is a debug build signed with the repository's **public test key** — do **not** distribute it as-is, and do not use it to replace another Termux build (different signing keys cannot be installed over each other).
 
+> **Package identity is still `com.termux`.** Only the user-visible name, icon and strings are renamed; the application id, Java packages, permission names and the `termux-*` command names are intentionally unchanged (scripts and companion apps depend on them). This build therefore **cannot coexist with another Termux build on the same device** — installing it replaces that app's identity.
+
 ## License
 
 **GPLv3 only**, with exceptions: code from [Android Terminal Emulator](https://github.com/jackpal/Android-Terminal-Emulator) (Apache-2.0) is used in `terminal-view` and `terminal-emulator`.
