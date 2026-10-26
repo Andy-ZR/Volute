@@ -32,7 +32,18 @@ import java.util.Locale;
  *   <li>一整列 {@code │} 自身墨迹区间内连续（跨行接缝不能断）；</li>
  *   <li>一整行 {@code ─} 自身墨迹区间内连续（跨列接缝不能断）；</li>
  *   <li>{@code █} 铺满字格；</li>
- *   <li><b>斜体不把框线画歪</b>——字体绘制会被 skew，自绘不受样式影响（这条最能卡住"退回字体"）。</li>
+ *   <li><b>同一条竖线换字体后几何不变</b>（偏移差 ≤0.5px 且各自都贴字格中线）——这条最能卡住"退回字体"。</li>
+ * </ul>
+ *
+ * <p><b>哪条断言能卡住什么（AVD API 34 实测，字体 × 字号 24 组矩阵）：</b>
+ * <ul>
+ *   <li>连续性只能卡"字形填不满字格"的字体：本机 `casual` 覆盖 0.83、空白 4–15px；
+ *       但 `monospace`/`sans-serif`/`serif` 在 12–48px 全部覆盖 1.000、空白 0px——
+ *       <b>光靠连续性是抓不到"退回字体"的</b>（系统有兜底字形）。</li>
+ *   <li>位置（偏移字格中线）在字体间差异很大：自绘恒定 −0.5px（像素栅格所致，与字体/字号无关）；
+ *       走字体时 monospace +0.0→+2.0px、sans-serif −0.5→+1.5、serif −1.5→−3.5、casual +0.0→+2.0。
+ *       注意小字号偏差小（monospace 12px 只有 0.0px）→ <b>只在单一大字号上断言位置有运气成分</b>，
+ *       所以位置断言必须成对比较两种字体。</li>
  * </ul>
  *
  * <p>排查用：{@code bash scripts/test-l3.sh} 加环境变量 {@code DUMP_IMAGES=true} 时把渲染结果写到
@@ -75,8 +86,12 @@ public class BoxDrawingRenderTest {
     }
 
     private static Rendered render(String content) {
+        return render(content, Typeface.MONOSPACE);
+    }
+
+    private static Rendered render(String content, Typeface typeface) {
         TerminalEmulator emulator = emulatorWith(content);
-        TerminalRenderer renderer = new TerminalRenderer(TEXT_SIZE, Typeface.MONOSPACE);
+        TerminalRenderer renderer = new TerminalRenderer(TEXT_SIZE, typeface);
 
         int width = Math.round(renderer.getFontWidth() * COLS);
         int height = renderer.getFontLineSpacing() * ROWS;
@@ -201,25 +216,32 @@ public class BoxDrawingRenderTest {
     }
 
     /**
-     * 竖线必须落在<b>字格水平中线</b>上（±1px）。
+     * 竖线必须贴字格中线（±1px），并且<b>换字体后几何不变</b>（两字体偏移差 ≤0.5px）。
      *
-     * <p>这是本测试里唯一能<b>区分"自绘"与"退回字体"</b>的性质：正体时两种画法都连续、都很像，
-     * 但字体画的框线位置由字体自己的 advance/度量决定，会偏离字格中线（AVD 上实测偏 5.7px），
-     * 于是相邻行接缝处竖线错位——正是用户看到的"框线断了/错位"。
+     * <p>为什么必须是"成对比较"：单独看一种字体、一个字号，字体画的线也可能恰好落在中线上
+     * （实测 monospace 12px 偏移 0.0px）→ 单点断言会漏掉"退回字体"。自绘的偏移与字体完全无关
+     * （24 组矩阵里恒为 −0.5px），所以"两字体一致"这条既准确又不受字号/字体选择影响。
      */
     @Test
-    public void verticalLineIsCenteredInCell() {
-        Rendered r = render(NO_CURSOR + "│\r\n│\r\n│\r\n│");
-        Bitmap bitmap = r.bitmap;
-        int bg = background(bitmap);
-        int x = bestColumn(bitmap, bg);
+    public void boxGeometryDoesNotDependOnFont() {
+        double monospaceDrift = verticalLineDriftPx(Typeface.MONOSPACE);
+        double serifDrift = verticalLineDriftPx(Typeface.SERIF);
 
-        double centroid = inkCentroidX(bitmap, bg, x, 0, bitmap.getHeight() - 1);
-        double expected = r.renderer.getFontWidth() * 0.5f;   // 第 0 列格中线
-        double drift = Math.abs(centroid - expected);
+        assertTrue(fmt("monospace 竖线偏离字格中线 %.2fpx", Math.abs(monospaceDrift)),
+                Math.abs(monospaceDrift) <= 1.0);
+        assertTrue(fmt("serif 竖线偏离字格中线 %.2fpx", Math.abs(serifDrift)),
+                Math.abs(serifDrift) <= 1.0);
+        assertTrue(fmt("框线几何随字体变了（monospace %.2fpx vs serif %.2fpx）——说明没走自绘",
+                monospaceDrift, serifDrift), Math.abs(monospaceDrift - serifDrift) <= 0.5);
+    }
 
-        assertTrue(fmt("竖线偏离字格中线 %.1fpx（质心 %.1f，应在 %.1f）——框线没走自绘",
-                drift, centroid, expected), drift <= 1.0);
+    /** 渲染一列竖线，返回墨迹水平质心相对字格中线的偏移（正 = 偏右）。 */
+    private static double verticalLineDriftPx(Typeface typeface) {
+        Rendered r = render(NO_CURSOR + "│\r\n│\r\n│\r\n│", typeface);
+        int bg = background(r.bitmap);
+        int x = bestColumn(r.bitmap, bg);
+        double centroid = inkCentroidX(r.bitmap, bg, x, 0, r.bitmap.getHeight() - 1);
+        return centroid - r.renderer.getFontWidth() * 0.5f;
     }
 
     /** 指定行区间内、x 附近墨迹的水平质心。 */
