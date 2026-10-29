@@ -103,7 +103,8 @@ public final class TermuxTerminalViewClient implements TerminalViewClient {
 
     @Override
     public boolean isTerminalViewSelected() {
-        return mActivity.getTerminalToolbarViewPager() == null || mActivity.isTerminalViewSelected() || mActivity.getTerminalView().hasFocus();
+        // 工具栏只剩 extra keys 一页（文本输入页 2026-10-29 删除），终端视图永远是被选中的那个。
+        return true;
     }
 
     @Override

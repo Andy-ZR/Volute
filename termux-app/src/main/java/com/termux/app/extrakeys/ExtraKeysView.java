@@ -59,6 +59,11 @@ public final class ExtraKeysView extends GridLayout {
 
     TermuxTerminalExtraKeys mExtraKeysViewClient;
 
+    /** 由宿主 Activity 注入（2026-10-29：删掉 ViewPager 后不再由 PageAdapter 赋值）。 */
+    public void setExtraKeysViewClient(TermuxTerminalExtraKeys client) {
+        mExtraKeysViewClient = client;
+    }
+
     /**
      * The map for the {@link SpecialButton} and their {@link SpecialButtonState}. Defaults to
      * the one returned by {@link #getDefaultSpecialButtons(ExtraKeysView)}.

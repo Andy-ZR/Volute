@@ -13,7 +13,7 @@
 
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_above="@+id/terminal_toolbar_view_pager"
+            android:layout_above="@+id/terminal_toolbar_extra_keys"
             android:layout_height="match_parent">
 
             <com.termux.view.TerminalView
@@ -93,8 +93,10 @@
 
         </androidx.drawerlayout.widget.DrawerLayout>
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/terminal_toolbar_view_pager"
+        <com.termux.app.extrakeys.ExtraKeysView
+            android:id="@+id/terminal_toolbar_extra_keys"
+            style="?android:attr/buttonBarStyle"
+            android:orientation="horizontal"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="37.5dp"
